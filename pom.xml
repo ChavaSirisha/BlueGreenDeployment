@@ -123,16 +123,4 @@
 </plugin>
 		</plugins>
 	</build>
-
-	 <distributionManagement>
-        <repository>
-            <id>maven3</id>
-            <url>http://ec2-34-207-220-244.compute-1.amazonaws.com:8081/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>maven-snapshots</id>
-            <url>http://ec2-34-207-220-244.compute-1.amazonaws.com:8081/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
-
 </project>
