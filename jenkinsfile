@@ -6,6 +6,11 @@ pipeline {
     environment {
         DOCKER_IMAGE= "anithapatcha/springboot:${env.BUILD_NUMBER}"
     }
+    parameters {
+        choice(name: 'DEPLOY_ENV', choices: ['blue', 'green'], description: 'Choose which environment to deploy: Blue or Green')
+        choice(name: 'DOCKER_TAG', choices: ['blue', 'green'], description: 'Choose the Docker image tag for the deployment')
+        booleanParam(name: 'SWITCH_TRAFFIC', defaultValue: false, description: 'Switch traffic between Blue and Green')
+    }
 
     stages {
         stage('Git Checkout') {
@@ -45,6 +50,24 @@ pipeline {
                     }
                 }
             } 
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    def deploymentFile = ""
+                    if (params.DEPLOY_ENV == 'blue') {
+                        deploymentFile = 'deployment-blue.yaml'
+                    } else {
+                        deploymentFile = 'deployment-green.yaml'
+                    }
+
+                    withKubeConfig(caCertificate: '', clusterName: 'wonderful-mongoose-1750390447', contextName: '', credentialsId: '', namespace: '', restrictKubeConfigAccess: false, serverUrl: 'https://C1362C8780FF7D973E72EDB042D9D70E.gr7.us-east-1.eks.amazonaws.com') {
+                        sh "kubectl apply -f ${deploymentFile} "
+                        sh 'kubectl apply -f service.yaml'
+                    }
+                }
+            }
         }
         // stage ('Deploy to Kubernetes'){
         //     steps {
