@@ -15,7 +15,7 @@ sudo systemctl enable jenkins
 sudo systemctl status jenkins
 
 # add jenkins user in sudoers file
-jenkins ALL=(ALL) NOPASSWD:ALL
+jenkins ALL=(ALL) NOPASSWD:ALL  #visudo
 
 #Docker Installation
 

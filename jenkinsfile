@@ -52,30 +52,23 @@ pipeline {
             } 
         }
 
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    def deploymentFile = ""
-                    if (params.DEPLOY_ENV == 'blue') {
-                        deploymentFile = 'deployment-blue.yaml'
-                    } else {
-                        deploymentFile = 'deployment-green.yaml'
-                    }
-
-                    withKubeConfig(caCertificate: '', clusterName: 'wonderful-mongoose-1750390447', contextName: '', credentialsId: '', namespace: '', restrictKubeConfigAccess: false, serverUrl: 'https://C1362C8780FF7D973E72EDB042D9D70E.gr7.us-east-1.eks.amazonaws.com') {
-                        sh "kubectl apply -f ${deploymentFile} "
-                        sh 'kubectl apply -f service.yaml'
-                    }
-                }
-            }
-        }
-        // stage ('Deploy to Kubernetes'){
+        // stage('Deploy to Kubernetes') {
         //     steps {
         //         script {
-        //             sh 'kubectl apply -f deployment-services.yaml'
-        //             sh 'kubectl apply -f svc.yaml'
+        //             def deploymentFile = ""
+        //             if (params.DEPLOY_ENV == 'blue') {
+        //                 deploymentFile = 'deployment-blue.yaml'
+        //             } else {
+        //                 deploymentFile = 'deployment-green.yaml'
+        //             }
+
+        //             withKubeConfig(caCertificate: '', clusterName: 'wonderful-mongoose-1750390447', contextName: '', credentialsId: 'k8-token', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://C1362C8780FF7D973E72EDB042D9D70E.gr7.us-east-1.eks.amazonaws.com') {
+        //                 sh "kubectl apply -f ${deploymentFile} "
+        //                 sh 'kubectl apply -f service.yaml'
+        //             }
         //         }
         //     }
-        // }  
+        // }
+        
     }
 }
