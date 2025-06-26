@@ -91,5 +91,19 @@ pipeline {
                 }
             }
         }
+
+        stage('Verify Deployment') {
+            steps {
+                script {
+                    def verifyEnv = params.DEPLOY_ENV
+                    withKubeConfig(caCertificate: '', clusterName: 'test-cluster', contextName: '', credentialsId: 'k8-token', namespace: '', restrictKubeConfigAccess: false, serverUrl: 'https://875D9268D454CB5CBD95F54559B3D856.gr7.us-east-1.eks.amazonaws.com') {
+                        sh """
+                        kubectl get pods -l version=${verifyEnv} 
+                        kubectl get svc boardgame-svc 
+                        """
+                    }
+                }
+            }
+        }
     }
 }
