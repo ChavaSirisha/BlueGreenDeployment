@@ -73,5 +73,23 @@ pipeline {
             }
         }
         
+        stage('Switch Traffic Between Blue & Green Environment') {
+            when {
+                expression { return params.SWITCH_TRAFFIC }
+            }
+            steps {
+                script {
+                    def newEnv = params.DEPLOY_ENV
+
+                    // Always switch traffic based on DEPLOY_ENV
+                    withKubeConfig(caCertificate: '', clusterName: 'test-cluster', contextName: '', credentialsId: 'k8-token', namespace: '', restrictKubeConfigAccess: false, serverUrl: 'https://875D9268D454CB5CBD95F54559B3D856.gr7.us-east-1.eks.amazonaws.com') {
+                        sh '''
+                            kubectl patch service service -p "{\\"spec\\": {\\"selector\\": {\\"app\\": \\"boardgame\\", \\"version\\": \\"''' + newEnv + '''\\"}}}" 
+                        '''
+                    }
+                    echo "Traffic has been switched to the ${newEnv} environment."
+                }
+            }
+        }
     }
 }
