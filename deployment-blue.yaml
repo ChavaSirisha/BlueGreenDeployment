@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: board-deployment
+  name: boardgame-blue
   labels:
     app: boardgame
 spec:
